@@ -1,0 +1,124 @@
+
+* { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+body, html { width: 100%; height: 100%; overflow: hidden; background: #050a06; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+#titleScreen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at center, #0b1c12 0%, #030805 100%);
+    display: flex; justify-content: center; align-items: center; z-index: 9999;
+    color: #fff; text-align: center; padding: 20px;
+}
+.title-content { max-width: 600px; width: 100%; }
+.game-emblem {
+    width: 90px; height: 90px; margin: 0 auto 20px auto;
+    border: 2px solid #5cb85c; border-radius: 50%;
+    background: radial-gradient(circle, #1a3c27 0%, #050a06 100%);
+    box-shadow: 0 0 25px rgba(92,184,92,0.4);
+}
+.subtitle { font-size: 1.1rem; color: #8bc34a; margin-bottom: 10px; letter-spacing: 2px; }
+h1 { font-size: 3rem; margin-bottom: 20px; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.4); }
+.desc { font-size: 1rem; color: #b0bec5; margin-bottom: 30px; line-height: 1.6; }
+
+button {
+    display: block; width: 100%; max-width: 320px; margin: 12px auto;
+    padding: 14px 24px; font-size: 1.1rem; font-weight: bold;
+    background: rgba(26,60,39,0.8); color: #fff; border: 2px solid #5cb85c;
+    border-radius: 30px; cursor: pointer; transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5); touch-action: manipulation;
+}
+button:hover { background: #5cb85c; color: #030805; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(92,184,92,0.5); }
+.controls-hint { margin-top: 30px; font-size: 0.85rem; color: #78909c; line-height: 1.5; }
+
+#gameContainer { position: relative; width: 100%; height: 100%; display: none; background: #000; }
+canvas { display: block; width: 100%; height: 100%; }
+
+#hud {
+    position: absolute; top: 15px; left: 15px; right: 15px;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    pointer-events: none; z-index: 100;
+}
+.hud-top-left { display: flex; align-items: center; gap: 10px; pointer-events: auto; }
+.spool-icon {
+    width: 40px; height: 40px; background: rgba(0,0,0,0.6); border: 2px solid #fff;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+}
+#spoolCount { font-size: 1.2rem; font-weight: bold; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+.hud-btn {
+    width: 40px; height: 40px; background: rgba(0,0,0,0.6); border: 2px solid rgba(255,255,255,0.7);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;
+    font-size: 1.1rem; transition: transform 0.2s; pointer-events: auto; touch-action: manipulation;
+}
+.hud-btn:hover { transform: scale(1.1); border-color: #5cb85c; }
+
+#healthContainer { display: flex; gap: 8px; pointer-events: auto; }
+.mask-icon {
+    width: 28px; height: 34px; background: #fff; border-radius: 14px 14px 10px 10px;
+    position: relative; box-shadow: 0 0 8px rgba(255,255,255,0.6); border: 2px solid #333;
+}
+.mask-icon.empty { background: rgba(255,255,255,0.2); box-shadow: none; }
+
+#zoneIndicator {
+    position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
+    background: rgba(10,25,15,0.85); border: 1px solid #5cb85c; padding: 6px 16px;
+    border-radius: 20px; color: #8bc34a; font-weight: bold; font-size: 0.95rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.6); pointer-events: none;
+}
+
+#bossHpBar {
+    position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+    width: 60%; max-width: 500px; height: 16px; background: rgba(0,0,0,0.8);
+    border: 2px solid #e53935; border-radius: 8px; overflow: hidden;
+}
+#bossHpFill { width: 100%; height: 100%; background: linear-gradient(90deg, #b71c1c, #e53935); transition: width 0.2s; }
+
+#touchControls {
+    position: absolute; bottom: 20px; left: 20px; right: 20px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    pointer-events: none; z-index: 100;
+}
+#dpad { position: relative; width: 140px; height: 140px; pointer-events: auto; }
+#joystickBase {
+    width: 140px; height: 140px; background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.3); border-radius: 50%;
+    position: relative; touch-action: none;
+}
+#joystickKnob {
+    width: 60px; height: 60px; background: rgba(255,255,255,0.4);
+    border-radius: 50%; position: absolute; top: 40px; left: 40px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5); pointer-events: none;
+}
+
+#actionPad { display: grid; grid-template-columns: repeat(5, 52px); gap: 10px; pointer-events: auto; }
+.touch-btn {
+    width: 52px; height: 52px; background: rgba(20,40,25,0.8);
+    border: 2px solid #5cb85c; border-radius: 50%; color: #fff;
+    font-size: 1.3rem; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); touch-action: manipulation;
+}
+.touch-btn:active { background: #5cb85c; transform: scale(0.92); }
+
+#dialogueBox {
+    position: absolute; bottom: 120px; left: 10%; right: 10%;
+    background: rgba(10,20,15,0.95); border: 2px solid #5cb85c; border-radius: 12px;
+    padding: 20px; color: #fff; z-index: 200; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+#npcName { font-size: 1.2rem; color: #8bc34a; margin-bottom: 8px; font-weight: bold; }
+#npcText { font-size: 1.1rem; line-height: 1.5; margin-bottom: 12px; }
+.dialogue-prompt { font-size: 0.85rem; color: #78909c; text-align: left; }
+
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 1000;
+}
+.modal-box {
+    background: #0b1c12; border: 2px solid #5cb85c; border-radius: 16px;
+    padding: 30px; width: 90%; max-width: 450px; text-align: center; color: #fff;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.9);
+}
+.modal-box h2 { color: #8bc34a; margin-bottom: 20px; font-size: 1.8rem; }
+.map-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 20px; text-align: right; }
+.map-node {
+    padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid #5cb85c;
+    border-radius: 8px; color: #b0bec5; font-weight: bold;
+}
+.map-node.active { background: #1a3c27; color: #fff; border-color: #8bc34a; box-shadow: 0 0 10px rgba(139,195,74,0.4); }

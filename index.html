@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>المملكة المفقودة - The Lost Kingdom</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="titleScreen">
+        <div class="title-content">
+            <div class="game-emblem"></div>
+            <div class="subtitle" id="subText">أساطير الحرير والطحالب</div>
+            <h1 id="mainTitleText">المملكة المفقودة</h1>
+            <p class="desc" id="descText">هبط عبر المغارات الزمردية المتشابكة، وقرية الأصداف المضاءة بالفوانيس، وأبراج الأجراس الغارقة لإسكات النسّاج القديم.</p>
+            
+            <button id="startBtn" onclick="window.startGame()">دخول المملكة</button>
+            <button id="langBtn" onclick="window.toggleLang()">English / العربية</button>
+            
+            <div class="controls-hint" id="hintsText">
+                الحركة: A/D أو الأسهم | القفز: K / X / Space<br>
+                الإبرة: Z / J (+أعلى/أسفل) | الاندفاع/العلاج: L/C أو H/V
+            </div>
+        </div>
+    </div>
+
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        
+        <div id="hud">
+            <div class="hud-top-left">
+                <div class="spool-icon" title="خيط الحرير">⚙️</div>
+                <div id="spoolCount">100</div>
+                <div id="mapBtn" class="hud-btn" onclick="toggleMap()" title="الخريطة">🗺️</div>
+                <div id="questsBtn" class="hud-btn" onclick="toggleQuests()" title="المهام">⭐</div>
+                <div id="soundBtn" class="hud-btn" onclick="toggleSound()" title="الصوت">🔊</div>
+                <div id="pauseBtn" class="hud-btn" onclick="togglePause()" title="إيقاف مؤقت">⏸️</div>
+            </div>
+            <div id="healthContainer"></div>
+            <div id="zoneIndicator">الغابة الزمردية</div>
+            <div id="bossHpBar" style="display:none;"><div id="bossHpFill"></div></div>
+        </div>
+
+        <div id="touchControls">
+            <div id="dpad">
+                <div id="joystickBase">
+                    <div id="joystickKnob"></div>
+                </div>
+            </div>
+            <div id="actionPad">
+                <button class="touch-btn" id="btnAttack" ontouchstart="playerAttack(); event.preventDefault();" onclick="playerAttack()">⚔️</button>
+                <button class="touch-btn" id="btnJump" ontouchstart="playerJump(); event.preventDefault();" onclick="playerJump()">🦘</button>
+                <button class="touch-btn" id="btnDash" ontouchstart="playerDash(); event.preventDefault();" onclick="playerDash()">💨</button>
+                <button class="touch-btn" id="btnSkill" ontouchstart="playerSkill(); event.preventDefault();" onclick="playerSkill()">✨</button>
+                <button class="touch-btn" id="btnHeal" ontouchstart="playerHeal(); event.preventDefault();" onclick="playerHeal()">💖</button>
+            </div>
+        </div>
+
+        <div id="dialogueBox" style="display:none;">
+            <div id="npcName">الشخصية</div>
+            <div id="npcText">حوار الشخصية...</div>
+            <div class="dialogue-prompt">اضغط Z أو انقر للمتابعة</div>
+        </div>
+
+        <div id="pauseMenu" style="display:none;" class="modal-overlay">
+            <div class="modal-box">
+                <h2 id="pauseTitle">الإيقاف المؤقت</h2>
+                <button onclick="togglePause()">استمرار</button>
+                <button onclick="window.toggleLang()">تغيير اللغة / Language</button>
+                <button onclick="location.reload()">العودة للقائمة الرئيسية</button>
+            </div>
+        </div>
+
+        <div id="mapModal" style="display:none;" class="modal-overlay">
+            <div class="modal-box map-box">
+                <h2>خريطة المملكة</h2>
+                <div class="map-grid">
+                    <div class="map-node active" id="node1">1. الغابة الزمردية (Moss Grotto)</div>
+                    <div class="map-node" id="node2">2. الغابة العميقة (Deep Canopy)</div>
+                    <div class="map-node" id="node3">3. قرية الأصداف (Shellwood Village)</div>
+                    <div class="map-node" id="node4">4. الكهوف المظلمة (Sunken Caverns)</div>
+                    <div class="map-node" id="node5">5. القلعة القديمة (Citadel of Weavers)</div>
+                </div>
+                <button onclick="toggleMap()">إغلاق</button>
+            </div>
+        </div>
+
+        <div id="questsModal" style="display:none;" class="modal-overlay">
+            <div class="modal-box">
+                <h2>المهام والأسرار</h2>
+                <p>• استكشف أعماق الغابة الزمردية وفعّل نقطة الحفظ (المقعد).</p>
+                <p>• تحدث إلى حشرات قرية الأصداف لفتح متجر التحسينات.</p>
+                <p>• اهزم حارس أجراس النساج في القلعة القديمة.</p>
+                <button onclick="toggleQuests()">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>

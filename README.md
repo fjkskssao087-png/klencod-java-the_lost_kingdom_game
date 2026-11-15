@@ -1,3 +1,3 @@
-# PROJECT: THE LOST KINGDOM
+# PROJECT: THE LOST KINGDOM - Android Java / WebView Edition
 
-Optimized Android WebView Edition - Fully playable hand-drawn 2D Metroidvania adventure game inspired by Hollow Knight and Silksong, featuring enhanced touch joystick responsiveness, hardware acceleration compatibility, and full Arabic/English localization.
+This repository contains a complete Android Studio Gradle project structure for **THE LOST KINGDOM**, a hand-drawn 2D Metroidvania game inspired by Hollow Knight and Silksong, fully localized in Arabic and English with touch joystick support, check-pointing, boss battles, and hardware-accelerated WebView execution.

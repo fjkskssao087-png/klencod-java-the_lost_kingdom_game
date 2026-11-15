@@ -16,7 +16,7 @@ const translations = {
         subtitle: "أساطير الحرير والطحالب",
         desc: "هبط عبر المغارات الزمردية المتشابكة، وقرية الأصداف المضاءة بالفوانيس، وأبراج الأجراس الغارقة لإسكات النسّاج القديم.",
         start: "دخول المملكة",
-        hints: "الحركة: A/D أو الأسهم | القفز: K / X / Space\nالإبرة: Z / J (+أعلى/أسفل) | الاندفاع/العلاج: L/C أو H/V",
+        hints: "الحركة: عصا اللمس أو A/D | القفز: 🦘 أو K/Space\nالإبرة: ⚔️ أو Z | الاندفاع: 💨 أو L | العلاج: 💖 أو C",
         pause: "الإيقاف المؤقت",
         resume: "استمرار",
         mainMenu: "العودة للقائمة الرئيسية"
@@ -26,7 +26,7 @@ const translations = {
         subtitle: "Legends of Silk & Moss",
         desc: "Descend through tangled emerald caverns, lantern-lit shell villages, and sunken bell towers to quiet the Ancient Weaver.",
         start: "Enter Kingdom",
-        hints: "Move: A/D or Arrows | Jump: K/X/Space\nNeedle: Z/J (+Up/Down) | Dash/Heal: L/C or H/V",
+        hints: "Move: Touch Joystick or A/D | Jump: 🦘 or K/Space\nNeedle: ⚔️ or Z | Dash: 💨 or L | Heal: 💖 or C",
         pause: "Paused",
         resume: "Resume",
         mainMenu: "Main Menu"
@@ -66,7 +66,7 @@ window.startGame = function() {
 
 let player = {
     x: 200, y: 300, w: 28, h: 46,
-    vx: 0, vy: 0, speed: 4.8, jumpForce: -12.2,
+    vx: 0, vy: 0, speed: 5.0, jumpForce: -12.5,
     grounded: false, facing: 1, hp: 5, maxHp: 5,
     silk: 100, maxSilk: 100, dashCooldown: 0,
     isAttacking: false, attackTimer: 0, attackType: 'neutral',
@@ -128,12 +128,11 @@ window.playerAttack = function() {
     else if ((keys['arrowdown'] || keys['s']) && !player.grounded) player.attackType = 'down';
     else player.attackType = 'neutral';
 
-    // Check hit on enemies
     enemies.forEach((en, idx) => {
         if (Math.abs(player.x - en.x) < 55 && Math.abs(player.y - en.y) < 55) {
             en.hp--;
             if (player.attackType === 'down') {
-                player.vy = -10; // Pogo bounce!
+                player.vy = -11; // Pogo bounce!
             }
             if (en.hp <= 0) {
                 enemies.splice(idx, 1);
@@ -144,7 +143,7 @@ window.playerAttack = function() {
 
     if (boss.active && Math.abs(player.x - boss.x) < 70 && Math.abs(player.y - boss.y) < 70) {
         boss.hp--;
-        if (player.attackType === 'down') player.vy = -10;
+        if (player.attackType === 'down') player.vy = -11;
         if (boss.hp <= 0) {
             boss.active = false;
             document.getElementById('bossHpBar').style.display = 'none';
@@ -161,8 +160,8 @@ window.playerJump = function() {
 
 window.playerDash = function() {
     if (player.dashCooldown <= 0) {
-        player.vx = player.facing * 14;
-        player.dashCooldown = 40;
+        player.vx = player.facing * 15;
+        player.dashCooldown = 35;
         for(let i=0; i<8; i++) {
             particles.push({
                 x: player.x, y: player.y + 20,
@@ -179,7 +178,7 @@ window.playerSkill = function() {
         for(let i=0; i<20; i++) {
             particles.push({
                 x: player.x + player.w/2, y: player.y + player.h/2,
-                vx: (Math.random()-0.5)*9, vy: (Math.random()-0.5)*9,
+                vx: (Math.random()-0.5)*10, vy: (Math.random()-0.5)*10,
                 life: 35, color: '#e0f2f1'
             });
         }
@@ -189,7 +188,7 @@ window.playerSkill = function() {
 window.playerHeal = function() {
     if (player.silk >= 33 && player.hp < player.maxHp && !player.isHealing) {
         player.isHealing = true;
-        player.healTimer = 40;
+        player.healTimer = 35;
     }
 };
 
@@ -212,7 +211,7 @@ window.toggleSound = function() {
     document.getElementById('soundBtn').innerText = soundEnabled ? '🔊' : '🔇';
 };
 
-// Touch joystick support
+// Touch joystick support optimized for Android WebViews
 let joystickActive = false;
 let joystickCenter = { x: 0, y: 0 };
 const dpadElem = document.getElementById('dpad');
@@ -220,10 +219,12 @@ const knobElem = document.getElementById('joystickKnob');
 
 dpadElem.addEventListener('touchstart', e => {
     joystickActive = true;
+    let touch = e.touches[0];
     let rect = dpadElem.getBoundingClientRect();
     joystickCenter.x = rect.left + rect.width / 2;
     joystickCenter.y = rect.top + rect.height / 2;
-});
+    e.preventDefault();
+}, {passive: false});
 
 window.addEventListener('touchmove', e => {
     if (!joystickActive) return;
@@ -231,15 +232,15 @@ window.addEventListener('touchmove', e => {
     let dx = touch.clientX - joystickCenter.x;
     let dy = touch.clientY - joystickCenter.y;
     let dist = Math.sqrt(dx*dx + dy*dy);
-    let maxDist = 50;
+    let maxDist = 45;
     if (dist > maxDist) {
         dx = (dx / dist) * maxDist;
         dy = (dy / dist) * maxDist;
     }
     knobElem.style.transform = `translate(${dx}px, ${dy}px)`;
     
-    if (dx < -15) { keys['a'] = true; keys['d'] = false; }
-    else if (dx > 15) { keys['d'] = true; keys['a'] = false; }
+    if (dx < -12) { keys['a'] = true; keys['d'] = false; }
+    else if (dx > 12) { keys['d'] = true; keys['a'] = false; }
     else { keys['a'] = false; keys['d'] = false; }
 }, {passive: true});
 
@@ -260,12 +261,12 @@ function updateGame() {
 
     if (moveDir !== 0) {
         player.facing = moveDir;
-        player.vx += (moveDir * player.speed - player.vx) * 0.25;
+        player.vx += (moveDir * player.speed - player.vx) * 0.28;
     } else {
-        player.vx *= 0.78;
+        player.vx *= 0.75;
     }
 
-    player.vy += 0.58; // Gravity
+    player.vy += 0.6; // Gravity
     player.x += player.vx;
     player.y += player.vy;
 
@@ -295,9 +296,8 @@ function updateGame() {
         if (player.attackTimer <= 0) player.isAttacking = false;
     }
 
-    player.cloakWave += 0.18;
+    player.cloakWave += 0.2;
 
-    // Determine current zone based on player position
     if (player.x < 2000) currentZoneName = 'الغابة الزمردية (Moss Grotto)';
     else if (player.x < 4200) currentZoneName = 'قرية الأصداف (Shellwood Village)';
     else if (player.x < 6000) currentZoneName = 'الكهوف المظلمة (Sunken Caverns)';
@@ -306,7 +306,7 @@ function updateGame() {
     document.getElementById('zoneIndicator').innerText = currentZoneName;
 
     let targetCamX = player.x - canvas.width / 2;
-    camera.x += (targetCamX - camera.x) * 0.12;
+    camera.x += (targetCamX - camera.x) * 0.15;
     if (camera.x < 0) camera.x = 0;
     if (camera.x > worldWidth - canvas.width) camera.x = worldWidth - canvas.width;
 
@@ -316,8 +316,8 @@ function updateGame() {
 
         if (Math.abs(player.x - en.x) < 28 && Math.abs(player.y - en.y) < 28) {
             player.hp--;
-            player.vx = -player.facing * 9;
-            player.vy = -6;
+            player.vx = -player.facing * 10;
+            player.vy = -6.5;
             if (player.hp <= 0) {
                 resetToCheckpoint();
             }
@@ -340,11 +340,11 @@ function updateGame() {
     }
 
     if (boss.active) {
-        boss.x += Math.sin(Date.now() / 350) * 3;
+        boss.x += Math.sin(Date.now() / 300) * 3.5;
         document.getElementById('bossHpFill').style.width = (boss.hp / boss.maxHp * 100) + '%';
         if (Math.abs(player.x - boss.x) < 55 && Math.abs(player.y - boss.y) < 55) {
             player.hp--;
-            player.vy = -7;
+            player.vy = -7.5;
             if (player.hp <= 0) resetToCheckpoint();
         }
     }
@@ -405,7 +405,7 @@ function renderGame() {
     ctx.fillStyle = '#112214';
     ctx.fillRect(0, 440, worldWidth, 300);
 
-    // Benches (Checkpoints)
+    // Benches
     benches.forEach(b => {
         ctx.fillStyle = '#4e342e';
         ctx.fillRect(b.x, b.y, b.w, b.h);
@@ -443,7 +443,6 @@ function renderGame() {
     ctx.translate(player.x + player.w/2, player.y + player.h/2);
     if (player.facing === -1) ctx.scale(-1, 1);
 
-    // Crimson Cloak with physics wave
     ctx.fillStyle = '#c62828';
     ctx.beginPath();
     ctx.moveTo(-11, -11);
@@ -452,25 +451,21 @@ function renderGame() {
     ctx.quadraticCurveTo(11, 12, 11, -11);
     ctx.fill();
 
-    // Ivory Mask Head
     ctx.fillStyle = '#ffffff';
     ctx.beginPath();
     ctx.ellipse(0, -6, 13, 17, 0, 0, Math.PI*2);
     ctx.fill();
 
-    // Horns
     ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 3.5;
     ctx.beginPath();
     ctx.moveTo(-4, -20); ctx.quadraticCurveTo(-15, -35, -20, -42);
     ctx.moveTo(4, -20); ctx.quadraticCurveTo(15, -35, 20, -42);
     ctx.stroke();
 
-    // Eyes
     ctx.fillStyle = '#000';
     ctx.fillRect(-7, -9, 3.5, 7);
     ctx.fillRect(3.5, -9, 3.5, 7);
 
-    // Glowing Iridescent Needle Weapon
     let needleGrad = ctx.createLinearGradient(0, 0, 40, 12);
     needleGrad.addColorStop(0, '#e0f2f1');
     needleGrad.addColorStop(0.5, '#ffd54f');
@@ -485,7 +480,6 @@ function renderGame() {
 
     ctx.restore();
 
-    // Particles
     particles.forEach(p => {
         ctx.fillStyle = p.color || '#5cb85c';
         ctx.fillRect(p.x, p.y, 4, 4);

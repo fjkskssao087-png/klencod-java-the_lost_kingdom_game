@@ -1,5 +1,5 @@
 
-* { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+* { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
 body, html { width: 100%; height: 100%; overflow: hidden; background: #050a06; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
 #titleScreen {
@@ -16,8 +16,8 @@ body, html { width: 100%; height: 100%; overflow: hidden; background: #050a06; f
     box-shadow: 0 0 25px rgba(92,184,92,0.4);
 }
 .subtitle { font-size: 1.1rem; color: #8bc34a; margin-bottom: 10px; letter-spacing: 2px; }
-h1 { font-size: 3rem; margin-bottom: 20px; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.4); }
-.desc { font-size: 1rem; color: #b0bec5; margin-bottom: 30px; line-height: 1.6; }
+h1 { font-size: 2.8rem; margin-bottom: 20px; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.4); }
+.desc { font-size: 1rem; color: #b0bec5; margin-bottom: 25px; line-height: 1.6; }
 
 button {
     display: block; width: 100%; max-width: 320px; margin: 12px auto;
@@ -27,7 +27,7 @@ button {
     box-shadow: 0 4px 15px rgba(0,0,0,0.5); touch-action: manipulation;
 }
 button:hover { background: #5cb85c; color: #030805; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(92,184,92,0.5); }
-.controls-hint { margin-top: 30px; font-size: 0.85rem; color: #78909c; line-height: 1.5; }
+.controls-hint { margin-top: 25px; font-size: 0.85rem; color: #78909c; line-height: 1.5; }
 
 #gameContainer { position: relative; width: 100%; height: 100%; display: none; background: #000; }
 canvas { display: block; width: 100%; height: 100%; }
@@ -76,23 +76,23 @@ canvas { display: block; width: 100%; height: 100%; }
     display: flex; justify-content: space-between; align-items: flex-end;
     pointer-events: none; z-index: 100;
 }
-#dpad { position: relative; width: 140px; height: 140px; pointer-events: auto; }
+#dpad { position: relative; width: 130px; height: 130px; pointer-events: auto; }
 #joystickBase {
-    width: 140px; height: 140px; background: rgba(255,255,255,0.1);
-    border: 2px solid rgba(255,255,255,0.3); border-radius: 50%;
+    width: 130px; height: 130px; background: rgba(255,255,255,0.12);
+    border: 2px solid rgba(255,255,255,0.35); border-radius: 50%;
     position: relative; touch-action: none;
 }
 #joystickKnob {
-    width: 60px; height: 60px; background: rgba(255,255,255,0.4);
-    border-radius: 50%; position: absolute; top: 40px; left: 40px;
+    width: 54px; height: 54px; background: rgba(255,255,255,0.45);
+    border-radius: 50%; position: absolute; top: 38px; left: 38px;
     box-shadow: 0 0 10px rgba(0,0,0,0.5); pointer-events: none;
 }
 
-#actionPad { display: grid; grid-template-columns: repeat(5, 52px); gap: 10px; pointer-events: auto; }
+#actionPad { display: grid; grid-template-columns: repeat(5, 48px); gap: 8px; pointer-events: auto; }
 .touch-btn {
-    width: 52px; height: 52px; background: rgba(20,40,25,0.8);
+    width: 48px; height: 48px; background: rgba(20,40,25,0.85);
     border: 2px solid #5cb85c; border-radius: 50%; color: #fff;
-    font-size: 1.3rem; display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; display: flex; align-items: center; justify-content: center;
     cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); touch-action: manipulation;
 }
 .touch-btn:active { background: #5cb85c; transform: scale(0.92); }
